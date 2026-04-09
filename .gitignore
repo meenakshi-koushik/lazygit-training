@@ -1,0 +1,6 @@
+# Exercise sandboxes (disposable, recreated by setup scripts)
+sandbox/
+
+# Lesson hint state tracking
+*.state
+.lazygit-training-state
