@@ -353,6 +353,13 @@ cmd_reset() {
     info "Resetting lesson: $1"
     clean_sandbox "$name"
 
+    # Clean up any companion directories (e.g., worktree dirs named <name>-*)
+    for companion in "${SANDBOX_DIR}/${name}-"*; do
+        if [[ -d "$companion" ]]; then
+            rm -rf "$companion"
+        fi
+    done
+
     # Clean hint state too
     rm -f "${STATE_DIR}/${name}.hint"
     # Keep .done state -- reset doesn't uncomplete a lesson
