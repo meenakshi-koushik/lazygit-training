@@ -181,7 +181,7 @@ The CLI runner supports these subcommands:
 | `./train.sh reset <module/lesson>` | Tear down the sandbox for a lesson |
 | `./train.sh solution <module/lesson>` | Show the full solution walkthrough |
 
-Lesson paths are specified as `<module-dir>/<lesson-dir>` (e.g., `01-orientation/01-navigating-panels`).
+Lesson references accept numeric shorthand (e.g., `1/1`, `2/3`) or full directory names (e.g., `01-orientation/01-navigating-panels`). The numeric form is `<module-number>/<lesson-number>` using the ordering shown by `./train.sh list`.
 
 ## Writing Style Guidelines
 

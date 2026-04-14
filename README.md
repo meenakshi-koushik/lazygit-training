@@ -23,21 +23,21 @@ cd lazygit-training
 # List all available lessons
 ./train.sh list
 
-# Start a specific lesson
-./train.sh start 01-orientation/01-navigating-panels
+# Start a specific lesson (use module/lesson numbers)
+./train.sh start 1/1
 
 # Open lazygit in the exercise sandbox
 cd sandbox/01-navigating-panels
 lazygit
 
 # Check if you completed the objectives
-./train.sh verify 01-orientation/01-navigating-panels
+./train.sh verify 1/1
 
 # Get a hint if stuck
-./train.sh hint 01-orientation/01-navigating-panels
+./train.sh hint 1/1
 
 # Reset a lesson to try again
-./train.sh reset 01-orientation/01-navigating-panels
+./train.sh reset 1/1
 ```
 
 ## How It Works

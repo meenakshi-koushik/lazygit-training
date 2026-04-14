@@ -4,12 +4,15 @@ set -euo pipefail
 # train.sh -- CLI runner for lazygit training lessons
 #
 # Usage:
-#   ./train.sh list                         List all modules and lessons
-#   ./train.sh start <module/lesson>        Set up and start a lesson
-#   ./train.sh verify <module/lesson>       Check if objectives are met
-#   ./train.sh hint <module/lesson>         Show the next progressive hint
-#   ./train.sh reset <module/lesson>        Tear down a lesson's sandbox
-#   ./train.sh solution <module/lesson>     Show the full solution walkthrough
+#   ./train.sh list                     List all modules and lessons
+#   ./train.sh start <module/lesson>    Set up and start a lesson
+#   ./train.sh verify <module/lesson>   Check if objectives are met
+#   ./train.sh hint <module/lesson>     Show the next progressive hint
+#   ./train.sh reset <module/lesson>    Tear down a lesson's sandbox
+#   ./train.sh solution <module/lesson> Show the full solution walkthrough
+#
+# Lesson references accept numeric shorthand (e.g., 1/1) or full names
+# (e.g., 01-orientation/01-navigating-panels).
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
@@ -28,26 +31,76 @@ Commands:
   reset <module/lesson>    Tear down a lesson's sandbox
   solution <module/lesson> Show the full solution walkthrough
 
+Lessons can be referenced by number (e.g., 1/1) or full name
+(e.g., 01-orientation/01-navigating-panels).
+
 Examples:
   ./train.sh list
-  ./train.sh start 01-orientation/01-navigating-panels
-  ./train.sh verify 01-orientation/01-navigating-panels
-  ./train.sh hint 01-orientation/01-navigating-panels
-  ./train.sh reset 01-orientation/01-navigating-panels
-  ./train.sh solution 01-orientation/01-navigating-panels
+  ./train.sh start 1/1
+  ./train.sh verify 1/1
+  ./train.sh hint 1/1
+  ./train.sh reset 2/3
+  ./train.sh solution 2/3
 EOF
 }
 
-# Resolve a lesson path argument to the lesson directory
+# Resolve a lesson path argument to the lesson directory.
+# Accepts either:
+#   - Numeric shorthand: "1/1", "2/3"
+#   - Full path: "01-orientation/01-navigating-panels"
 resolve_lesson() {
     local arg="$1"
-    local lesson_dir="${LESSONS_DIR}/${arg}"
+    local lesson_dir
+
+    if [[ "$arg" =~ ^([0-9]+)/([0-9]+)$ ]]; then
+        # Numeric shorthand -- find the Nth module and Mth lesson
+        local mod_num="${BASH_REMATCH[1]}"
+        local les_num="${BASH_REMATCH[2]}"
+        local mod_prefix
+        mod_prefix=$(printf "%02d-" "$mod_num")
+        local les_prefix
+        les_prefix=$(printf "%02d-" "$les_num")
+
+        # Find matching module directory
+        local mod_dir=""
+        for d in "$LESSONS_DIR"/${mod_prefix}*/; do
+            if [[ -d "$d" ]]; then
+                mod_dir="$d"
+                break
+            fi
+        done
+        if [[ -z "$mod_dir" ]]; then
+            error "Module ${mod_num} not found (no directory matching ${mod_prefix}* in lessons/)" >&2
+            echo "Run './train.sh list' to see available lessons." >&2
+            exit 1
+        fi
+
+        # Find matching lesson directory within the module
+        local les_dir=""
+        for d in "${mod_dir}"${les_prefix}*/; do
+            if [[ -d "$d" ]]; then
+                les_dir="$d"
+                break
+            fi
+        done
+        if [[ -z "$les_dir" ]]; then
+            error "Lesson ${les_num} not found in module ${mod_num} (no directory matching ${les_prefix}* in $(basename "$mod_dir"))" >&2
+            echo "Run './train.sh list' to see available lessons." >&2
+            exit 1
+        fi
+
+        # Remove trailing slash
+        lesson_dir="${les_dir%/}"
+    else
+        # Full path
+        lesson_dir="${LESSONS_DIR}/${arg}"
+    fi
 
     if [[ ! -d "$lesson_dir" ]]; then
-        error "Lesson not found: ${arg}"
-        echo "  Expected directory: ${lesson_dir}"
-        echo ""
-        echo "Run './train.sh list' to see available lessons."
+        error "Lesson not found: ${arg}" >&2
+        echo "  Expected directory: ${lesson_dir}" >&2
+        echo "" >&2
+        echo "Run './train.sh list' to see available lessons." >&2
         exit 1
     fi
 
@@ -58,6 +111,32 @@ resolve_lesson() {
 sandbox_name() {
     local lesson_path="$1"
     basename "$lesson_path"
+}
+
+# Compute the numeric shorthand (e.g., "1/3") for a resolved lesson directory
+lesson_shorthand() {
+    local lesson_path="$1"
+    local lesson_basename module_basename
+    lesson_basename=$(basename "$lesson_path")
+    module_basename=$(basename "$(dirname "$lesson_path")")
+
+    local mod_idx=0
+    for mod_dir in "$LESSONS_DIR"/*/; do
+        [[ -d "$mod_dir" ]] || continue
+        mod_idx=$((mod_idx + 1))
+        if [[ "$(basename "$mod_dir")" == "$module_basename" ]]; then
+            local les_idx=0
+            for les_dir in "$mod_dir"*/; do
+                [[ -d "$les_dir" ]] || continue
+                les_idx=$((les_idx + 1))
+                if [[ "$(basename "$les_dir")" == "$lesson_basename" ]]; then
+                    echo "${mod_idx}/${les_idx}"
+                    return
+                fi
+            done
+        fi
+    done
+    echo "?/?"
 }
 
 # --- Commands ---
@@ -77,11 +156,13 @@ cmd_list() {
         local module_name
         module_name=$(basename "$module_dir")
         echo ""
-        color_echo bold "  ${module_name}"
+        color_echo bold "  Module ${module_count}: ${module_name}"
 
+        local lesson_in_module=0
         for lesson_dir in "$module_dir"*/; do
             [[ -d "$lesson_dir" ]] || continue
             lesson_count=$((lesson_count + 1))
+            lesson_in_module=$((lesson_in_module + 1))
 
             local lesson_name
             lesson_name=$(basename "$lesson_dir")
@@ -95,7 +176,8 @@ cmd_list() {
                 status_marker=$(printf "${_YELLOW}▶ ${_RESET}")
             fi
 
-            printf "    %b %s/%s" "$status_marker" "$module_name" "$lesson_name"
+            local shorthand="${module_count}/${lesson_in_module}"
+            printf "    %b %-6s %s" "$status_marker" "$shorthand" "$lesson_name"
 
             # Show lesson title from README if available
             if [[ -f "${lesson_dir}/README.md" ]]; then
@@ -113,6 +195,8 @@ cmd_list() {
     echo ""
     echo "Legend:  ✓ = completed   ▶ = in progress   (blank) = not started"
     echo ""
+    echo "Usage:  ./train.sh start 1/1    (use the shorthand numbers above)"
+    echo ""
 }
 
 cmd_start() {
@@ -120,9 +204,11 @@ cmd_start() {
     lesson_dir=$(resolve_lesson "$1")
     local name
     name=$(sandbox_name "$lesson_dir")
+    local shorthand
+    shorthand=$(lesson_shorthand "$lesson_dir")
 
     separator
-    color_echo bold "Starting lesson: $1"
+    color_echo bold "Starting lesson ${shorthand}: $(basename "$lesson_dir")"
     separator
     echo ""
 
@@ -153,9 +239,9 @@ cmd_start() {
     echo "    1. cd ${sandbox_path}"
     echo "    2. lazygit"
     echo "    3. Complete the objectives above"
-    echo "    4. Run: ./train.sh verify $1"
+    echo "    4. Run: ./train.sh verify ${shorthand}"
     echo ""
-    echo "  Stuck? Run: ./train.sh hint $1"
+    echo "  Stuck? Run: ./train.sh hint ${shorthand}"
     echo ""
 }
 
