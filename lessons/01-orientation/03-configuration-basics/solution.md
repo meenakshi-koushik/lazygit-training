@@ -20,7 +20,7 @@ Press `1` or use `<tab>` to cycle panels until you reach the **Status panel** in
 
 With the Status panel focused, press `o`. This opens the lazygit config file (`~/.config/lazygit/config.yml`) in your default editor.
 
-Alternatively, press `,` to edit the config file directly inside lazygit.
+Alternatively, press `e` to edit the config file directly inside lazygit.
 
 Take a moment to browse the file. You'll see settings for keybindings, UI preferences, git behavior, and more. Close the editor when you're done.
 
@@ -28,9 +28,9 @@ Take a moment to browse the file. You'll see settings for keybindings, UI prefer
 
 ## Step 4 -- View the command log panel
 
-Press `` ` `` (backtick) anywhere in lazygit. The **command log panel** appears at the bottom of the screen, showing recent git commands that lazygit has executed.
+Press `@` anywhere in lazygit. The **command log panel** appears at the bottom of the screen, showing recent git commands that lazygit has executed.
 
-Press `` ` `` again to expand the panel, and once more to hide it. The panel cycles through three states:
+Press `@` again to expand the panel, and once more to hide it. The panel cycles through three states:
 
 1. **Hidden** -- no command log visible
 2. **Small** -- a compact strip at the bottom showing the last few commands
@@ -40,7 +40,7 @@ Press `` ` `` again to expand the panel, and once more to hide it. The panel cyc
 
 ## Step 5 -- Stage all modified files
 
-Navigate to the **Files panel** by pressing `1` or using `<tab>`. You should see the two modified files.
+Navigate to the **Files panel** by pressing `2` or using `<tab>`. You should see the two modified files.
 
 Press `a` to stage all files at once. Both files should move to the staged state (they will appear green or with a staging indicator).
 

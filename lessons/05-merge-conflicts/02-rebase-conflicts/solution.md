@@ -19,7 +19,7 @@ Git starts replaying your first commit ("feat(worker): add retry configuration")
 
 ## Step 3 -- Resolve the first conflict (config.py)
 
-1. Switch to the **Files** panel (press `1`). You see `services/worker/src/config.py` marked `UU`.
+1. Switch to the **Files** panel (press `2`). You see `services/worker/src/config.py` marked `UU`.
 2. Select the file and press `<enter>` to open the merge conflict view.
 3. The conflict shows your retry settings vs. the teammate's batch settings. Press `b` to keep both sides.
 4. If there are multiple conflict sections, navigate with `<up>`/`<down>` and resolve each one with `b`.

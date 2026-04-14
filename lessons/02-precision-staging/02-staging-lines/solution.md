@@ -21,7 +21,7 @@ On the right side, the diff pane shows all the changes in one hunk. You will see
 
 ## Step 2: Switch to line-staging mode
 
-With the diff visible, press `<tab>`. This switches from hunk selection to **line selection**. You should see the highlight narrow to a single line in the diff instead of the entire hunk.
+With the diff visible, press `a`. This switches from hunk selection to **line selection**. You should see the highlight narrow to a single line in the diff instead of the entire hunk.
 
 ## Step 3: Stage only the feature lines
 

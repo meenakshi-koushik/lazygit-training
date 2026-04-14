@@ -11,7 +11,7 @@ Lazygit opens with the Files panel focused. The working tree is clean. You are o
 
 ## Step 2 -- Navigate to the Branches panel
 
-Press `2` (or use `]` to cycle panels) to switch to the **Branches** panel. You should see:
+Press `3` (or use `]` to cycle panels) to switch to the **Branches** panel. You should see:
 
 - `feature/api-refactor` (marked as current with a `*`)
 - `main`
@@ -41,11 +41,11 @@ Press `<esc>` to return to the Branches panel.
 
 ## Step 5 -- View the diff between branches
 
-Select `main` in the Branches panel and press `<space>`. This shows the diff between your current branch (`feature/api-refactor`) and `main`. You can see exactly what files differ and how.
+Select `main` in the Branches panel and press `W`. This opens the diffing menu. Choose the option to diff against the selected branch. The main panel now shows the diff between your current branch (`feature/api-refactor`) and `main`. You can see exactly what files differ and how.
 
 > **Git context:** This is equivalent to `git diff main...feature/api-refactor`, showing the changes your branch introduces relative to `main`.
 
-Press `<esc>` to close the diff view.
+Press `<esc>` to exit diff mode.
 
 ## Step 6 -- Rebase onto main
 

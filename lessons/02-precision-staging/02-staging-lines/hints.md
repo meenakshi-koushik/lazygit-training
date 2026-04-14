@@ -6,7 +6,7 @@ Start by selecting `services/api/src/config.py` in the Files panel. Look at the 
 
 ## Hint 2
 
-With the file selected and the diff visible, press `<tab>` to switch from hunk-selection mode to **line-selection mode**. The selection highlight should change from covering the whole hunk to just a single line. Now you can navigate with `j`/`k` through individual lines in the diff.
+With the file selected and the diff visible, press `a` to switch from hunk-selection mode to **line-selection mode**. The selection highlight should change from covering the whole hunk to just a single line. Now you can navigate with `j`/`k` through individual lines in the diff.
 
 ## Hint 3
 

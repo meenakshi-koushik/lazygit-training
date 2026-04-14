@@ -4,7 +4,7 @@ You need to get the unstaged change into the right commit -- not the latest one.
 
 ## Hint 2
 
-First, stage the fix. In the **Files** panel, select `services/api/src/token.py` and press `<space>` to stage it. Now switch to the **Commits** panel (press `2` or navigate with `]`/`[`). You need to select the commit this fix belongs to -- "feat(api): implement token validation" (the second one from the top).
+First, stage the fix. In the **Files** panel, select `services/api/src/token.py` and press `<space>` to stage it. Now switch to the **Commits** panel (press `4` or navigate with `]`/`[`). You need to select the commit this fix belongs to -- "feat(api): implement token validation" (the second one from the top).
 
 ## Hint 3
 

@@ -8,7 +8,7 @@ In the **Files** panel, you should see `services/api/src/routes.py` with unstage
 
 ## Hint 3
 
-Now fix the typo. Switch to the **Commits** panel (press `2` or use `]`/`[` to cycle panels). Select the top commit (the one that says "feat(api): add input validaton"). Press `r` to reword the message. Correct "validaton" to "validation" and press `<enter>`.
+Now fix the typo. Switch to the **Commits** panel (press `4` or use `]`/`[` to cycle panels). Select the top commit (the one that says "feat(api): add input validaton"). Press `r` to reword the message. Correct "validaton" to "validation" and press `<enter>`.
 
 ## Hint 4
 

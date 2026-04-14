@@ -33,7 +33,7 @@ The staged file is now folded into the last commit. The Files panel should be em
 
 ## Step 4 -- Reword the commit message
 
-1. Switch to the **Commits** panel by pressing `2` (or cycle with `]`).
+1. Switch to the **Commits** panel by pressing `4` (or cycle with `]`).
 2. The top commit should be selected (HEAD). It still reads "feat(api): add input validaton".
 3. Press `r` to reword the commit message.
 4. An inline editor appears with the current message. Fix the typo: change `validaton` to `validation`.

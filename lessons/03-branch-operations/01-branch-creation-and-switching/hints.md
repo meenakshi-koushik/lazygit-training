@@ -8,7 +8,7 @@ To create a new branch, press `n` while in the Branches panel. Type the branch n
 
 ## Hint 3
 
-You need to make a commit on `feature/search-api` before switching away. Go to the Files panel (`1`), edit any file (or use the terminal), stage changes with `<space>`, and commit with `c`. Even a one-line change is enough.
+You need to make a commit on `feature/search-api` before switching away. Go to the Files panel (`2`), edit any file (or use the terminal), stage changes with `<space>`, and commit with `c`. Even a one-line change is enough.
 
 To switch back to `main`, go to the Branches panel (`3`), select `main`, and press `<space>`.
 

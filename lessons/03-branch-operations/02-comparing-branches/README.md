@@ -22,7 +22,7 @@ Before opening a pull request, you need to understand the divergence: which comm
 Lazygit's **Branches** panel lets you compare branches and understand divergence without leaving the TUI:
 
 - **Viewing branch commits**: In the Branches panel, select a branch and press `<enter>` to see its commit history. This helps you understand what work exists on each branch.
-- **Comparing branches (diffing)**: While viewing your branch, press `<space>` on another branch (e.g., `main`) to see the diff between the two branches. This shows you exactly what has changed between them.
+- **Comparing branches (diffing)**: In the Branches panel, select a branch (e.g., `main`) and press `W` to open the diffing menu. This lets you diff your current branch against the selected branch, showing exactly what has changed between them.
 - **Rebasing onto another branch**: Select the target branch (e.g., `main`) in the Branches panel and press `r` to rebase the current branch onto it. This replays your commits on top of the target branch's latest state.
 
 Under the hood, rebasing rewrites your branch's commits so they sit on top of `main`'s HEAD rather than branching off from the old point. After a successful rebase, `main` is a direct ancestor of your branch, meaning a future merge will be a clean fast-forward.

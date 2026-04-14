@@ -183,6 +183,44 @@ The CLI runner supports these subcommands:
 
 Lesson references accept numeric shorthand (e.g., `1/1`, `2/3`) or full directory names (e.g., `01-orientation/01-navigating-panels`). The numeric form is `<module-number>/<lesson-number>` using the ordering shown by `./train.sh list`.
 
+## Lazygit Keybinding Reference
+
+**Always consult the official lazygit keybinding docs before writing or editing lessons.** The upstream source of truth is:
+
+  https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md
+
+Common mistakes to avoid (panel numbers are especially easy to get wrong):
+
+| Panel          | Number key |
+|----------------|-----------|
+| Status         | `1`       |
+| Files          | `2`       |
+| Local Branches | `3`       |
+| Commits        | `4`       |
+| Stash          | `5`       |
+
+Other frequently-used keybindings that have been sources of errors:
+
+| Action | Correct key | Context |
+|--------|------------|---------|
+| Toggle command log | `@` | Global |
+| Edit config file | `e` | Status panel |
+| Toggle hunk/line selection | `a` | Staging view |
+| View diffing options | `W` | Global |
+| Stash all changes | `s` | Files panel |
+| View stash options | `S` | Files panel |
+| View merge/rebase options | `m` | Global |
+| Cherry-pick (copy) | `C` | Commits panel |
+| Cherry-pick (paste) | `V` | Commits panel |
+| View bisect options | `b` | Commits panel |
+| Pick hunk (merge conflict) | `<space>` | Merging panel |
+| Pick all hunks (merge conflict) | `b` | Merging panel |
+| Navigate conflicts | `<left>` / `<right>` | Merging panel |
+| Navigate hunks within conflict | `<up>` / `<down>` | Merging panel |
+| Apply stash | `<space>` | Stash panel |
+| Pop stash | `g` | Stash panel |
+| Drop stash | `d` | Stash panel |
+
 ## Writing Style Guidelines
 
 - **Lazygit-first**: Always teach through lazygit. Show the lazygit workflow as the primary method.

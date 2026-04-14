@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source "$(dirname "$0")/../../lib/common.sh"
-source "$(dirname "$0")/../../lib/verify.sh"
+source "$(dirname "$0")/../../../lib/common.sh"
+source "$(dirname "$0")/../../../lib/verify.sh"
 
 EXERCISE_NAME="03-configuration-basics"
 REPO_PATH="${SANDBOX_DIR}/${EXERCISE_NAME}"

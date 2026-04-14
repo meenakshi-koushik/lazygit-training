@@ -21,7 +21,7 @@ After completing the objectives, the staged (index) version of the file should c
 ## Key Concepts
 
 - When a hunk contains a mix of changes you want and changes you don't, hunk-level staging is too coarse. Lazygit lets you drop into **line-staging mode** to select individual lines.
-- In the diff view for a file, press `<tab>` to switch between the "hunk" selection mode and "line" selection mode. In line mode, you can use `j`/`k` (or arrow keys) to move through individual diff lines and press `<space>` to toggle staging on each line.
+- In the diff view for a file, press `a` to toggle between "hunk" selection mode and "line" selection mode. In line mode, you can use `j`/`k` (or arrow keys) to move through individual diff lines and press `<space>` to toggle staging on each line.
 - Under the hood, this is equivalent to `git add -p` followed by manually editing the hunk (the `e` option in interactive staging), but lazygit makes it visual and immediate.
 
 ## Prerequisites

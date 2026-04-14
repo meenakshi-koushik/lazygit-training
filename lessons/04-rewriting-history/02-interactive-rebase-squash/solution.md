@@ -6,7 +6,7 @@
 lazygit -p sandbox/02-interactive-rebase-squash
 ```
 
-Lazygit opens with the **Files** panel focused. Press `3` or navigate to the **Commits** panel. You should see 5 commits on `feature/rate-limiting` above the main branch history:
+Lazygit opens with the **Files** panel focused. Press `4` or navigate to the **Commits** panel. You should see 5 commits on `feature/rate-limiting` above the main branch history:
 
 ```
 cleanup

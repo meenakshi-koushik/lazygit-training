@@ -27,7 +27,7 @@ The file moves from the unstaged section to the staged section.
 
 ## Step 3 -- Create a fixup commit
 
-1. Switch to the **Commits** panel by pressing `2` (or navigate with `[`/`]`).
+1. Switch to the **Commits** panel by pressing `4` (or navigate with `[`/`]`).
 2. Use `j`/`k` to select the second commit: `feat(api): implement token validation`.
 3. Press `F` (shift+f) to create a fixup commit targeting this commit.
 

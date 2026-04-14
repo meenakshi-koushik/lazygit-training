@@ -31,7 +31,7 @@ Lazygit creates the branch and checks it out automatically. The branch indicator
 
 You need at least one commit on `feature/search-api` so it is ahead of `main`.
 
-1. Press `1` to go to the **Files** panel.
+1. Press `2` to go to the **Files** panel.
 2. Open a file for editing. You can press `e` on any file to open it in your editor, or use the terminal. A simple approach: press `e` on `services/api/src/routes.py`, add a comment line (e.g., `# TODO: add search endpoint`), save, and close the editor.
 3. Back in the Files panel, the modified file appears. Select it and press `<space>` to stage it.
 4. Press `c` to open the commit dialog. Type a message like `feat(api): scaffold search endpoint` and press `<enter>`.

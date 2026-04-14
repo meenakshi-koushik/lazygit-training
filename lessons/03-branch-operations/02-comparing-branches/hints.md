@@ -1,6 +1,6 @@
 ## Hint 1
 
-Start by exploring the **Branches** panel (press `2` or navigate to it with `]`/`[`). You should see both `feature/api-refactor` (your current branch) and `main`. Try selecting each branch to see what information lazygit shows you.
+Start by exploring the **Branches** panel (press `3` or navigate to it with `]`/`[`). You should see both `feature/api-refactor` (your current branch) and `main`. Try selecting each branch to see what information lazygit shows you.
 
 ## Hint 2
 

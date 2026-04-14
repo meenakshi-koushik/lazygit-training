@@ -11,7 +11,7 @@ Lazygit opens with the Files panel focused. The repo is clean (no uncommitted ch
 
 ## Step 2 -- Switch to the Branches panel
 
-Press `2` (or use the number shown at the top of the Branches panel) to jump directly to the **Branches** panel. You should see a long list of branches: `main` plus 15 topic branches spanning `feature/`, `bugfix/`, `hotfix/`, `release/`, and `chore/` prefixes.
+Press `3` (or use the number shown at the top of the Branches panel) to jump directly to the **Branches** panel. You should see a long list of branches: `main` plus 15 topic branches spanning `feature/`, `bugfix/`, `hotfix/`, `release/`, and `chore/` prefixes.
 
 ## Step 3 -- Filter for chore branches
 

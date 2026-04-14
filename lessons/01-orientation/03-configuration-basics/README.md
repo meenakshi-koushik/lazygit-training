@@ -19,9 +19,9 @@ You are working in a monorepo with several services. Before diving into more adv
 ## Key Concepts
 
 - Lazygit stores its configuration in `~/.config/lazygit/config.yml` (Linux/macOS) or `%APPDATA%\lazygit\config.yml` (Windows). This file controls keybindings, UI behavior, colors, and custom commands.
-- From the **Status panel** (the top-left panel showing the repo name), pressing `o` opens the lazygit config file in your editor. Pressing `,` opens it for direct editing within lazygit.
+- From the **Status panel** (the top-left panel showing the repo name), pressing `o` opens the lazygit config file in your editor. Pressing `e` opens it for direct editing within lazygit.
 - The **command log panel** appears at the bottom of the lazygit UI and shows every git command that lazygit executes. This is invaluable for understanding what's happening and for learning git itself.
-- You can toggle the command log panel by pressing `` ` `` (backtick). The panel cycles through three states: hidden, small, and expanded.
+- You can toggle the command log panel by pressing `@`. The panel cycles through three states: hidden, small, and expanded.
 - The command log is not just a learning tool -- when something goes wrong, it shows you exactly what command failed so you can investigate or report the issue.
 
 ## Prerequisites

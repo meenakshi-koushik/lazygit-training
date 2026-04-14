@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source "$(dirname "$0")/../../lib/common.sh"
-source "$(dirname "$0")/../../lib/monorepo.sh"
-source "$(dirname "$0")/../../lib/history.sh"
+source "$(dirname "$0")/../../../lib/common.sh"
+source "$(dirname "$0")/../../../lib/monorepo.sh"
+source "$(dirname "$0")/../../../lib/history.sh"
 
 # --- Create the exercise repo ---
 
