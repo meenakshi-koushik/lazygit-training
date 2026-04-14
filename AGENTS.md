@@ -224,6 +224,10 @@ Use conventional commits when committing to this repo:
 - `docs: update README module table with new lessons`
 - `chore(train.sh): add completion tracking`
 
+## Temporary Files
+
+Do not create temporary files in `/tmp`. Use the `dist/` subdirectory at the repository root for any build artifacts, generated output, or scratch files. The `dist/` directory is gitignored. Clean up temporary files when they are no longer needed -- do not leave stale artifacts in `dist/`.
+
 ## Module and Lesson Index
 
 The authoritative list of modules and lessons is in `README.md`. If this file and `README.md` disagree on what lessons exist, `README.md` is wrong and must be fixed -- the filesystem under `lessons/` is the source of truth.
