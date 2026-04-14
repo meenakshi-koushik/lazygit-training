@@ -1,5 +1,9 @@
 # Partial Unstaging
 
+```bash
+lazygit -p sandbox/04-partial-unstaging
+```
+
 ## Scenario
 
 You are working on a platform monorepo, making changes across two services: `api` and `worker`. You've been modifying files in both services -- adding rate limiting to the API and improving retry logic in the worker. You intended to commit these as two separate, focused commits, but you accidentally pressed `a` in lazygit's Files panel and staged everything at once.
@@ -24,3 +28,9 @@ After completing the objectives, `git diff --cached` should show only API change
 ## Prerequisites
 
 - [02-precision-staging/01-staging-hunks](../01-staging-hunks/) -- you should be comfortable with hunk-level staging and understand the staging area concept.
+
+## Verify
+
+```bash
+./train.sh verify 2/4
+```

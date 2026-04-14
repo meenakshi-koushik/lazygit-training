@@ -1,5 +1,9 @@
 # Status Panel Deep Dive
 
+```bash
+lazygit -p sandbox/02-status-panel-deep-dive
+```
+
 ## Scenario
 
 You are working on a monorepo with several active feature branches. Your team has been busy -- there are branches for authentication, notifications, a database migration, and infrastructure changes all in flight. You need to get oriented: understand what branch you are on, see what other branches have been active recently, switch to a specific branch, and create a new branch from there.
@@ -23,3 +27,9 @@ In lazygit, the **Status panel** (the top-left panel, panel 1) is your starting 
 ## Prerequisites
 
 - [01-orientation/01-navigating-panels](../01-navigating-panels/) -- you should be comfortable moving between lazygit panels.
+
+## Verify
+
+```bash
+./train.sh verify 1/2
+```

@@ -27,8 +27,7 @@ cd lazygit-training
 ./train.sh start 1/1
 
 # Open lazygit in the exercise sandbox
-cd sandbox/01-navigating-panels
-lazygit
+lazygit -p sandbox/01-navigating-panels
 
 # Check if you completed the objectives
 ./train.sh verify 1/1

@@ -1,5 +1,9 @@
 # Staging Individual Hunks
 
+```bash
+lazygit -p sandbox/01-staging-hunks
+```
+
 ## Scenario
 
 You are working on the platform monorepo and just finished a coding session where you touched several files across `services/api/` and `services/worker/`. You want to make a focused commit that only includes part of your work -- specifically, a new import and logging setup you added near the top of `services/api/src/routes.py`. The rest of your changes (a new route at the bottom of the same file and changes in the worker service) should stay out of this commit.
@@ -29,3 +33,9 @@ Under the hood, lazygit runs `git add --patch` style operations, updating the in
 ## Prerequisites
 
 - Module 1 (01-orientation) -- you should be comfortable navigating lazygit panels and staging files.
+
+## Verify
+
+```bash
+./train.sh verify 2/1
+```

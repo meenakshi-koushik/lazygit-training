@@ -1,5 +1,9 @@
 # Splitting Multi-Component Changes
 
+```bash
+lazygit -p sandbox/03-splitting-multi-component-changes
+```
+
 ## Scenario
 
 You have been working on a feature that adds rate limiting across the platform. The changes span three components: the API service, the background worker, and the shared `common` library. You modified 2-3 files in each component and everything is sitting unstaged in your working tree.
@@ -29,3 +33,9 @@ This is a bread-and-butter monorepo workflow. You touch multiple components whil
 ## Prerequisites
 
 - [02-precision-staging/02-staging-lines](../02-staging-lines/) -- you should be comfortable staging in lazygit's Files panel.
+
+## Verify
+
+```bash
+./train.sh verify 2/3
+```

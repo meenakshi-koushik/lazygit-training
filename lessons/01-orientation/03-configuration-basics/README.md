@@ -1,5 +1,9 @@
 # Configuration Basics
 
+```bash
+lazygit -p sandbox/03-configuration-basics
+```
+
 ## Scenario
 
 You are working in a monorepo with several services. Before diving into more advanced lazygit workflows, you want to understand how lazygit is configured and how to see what git commands it runs behind the scenes. Knowing where the config file lives and how to read the command log will make you a much more effective lazygit user -- you'll be able to customize keybindings, tweak behavior, and debug issues by seeing exactly what git operations happen under the hood.
@@ -23,3 +27,9 @@ You are working in a monorepo with several services. Before diving into more adv
 ## Prerequisites
 
 - [Lesson 01: Navigating Panels](../01-navigating-panels/) -- you should be comfortable switching between lazygit panels.
+
+## Verify
+
+```bash
+./train.sh verify 1/3
+```

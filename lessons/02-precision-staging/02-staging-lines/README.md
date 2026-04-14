@@ -1,5 +1,9 @@
 # Staging Individual Lines
 
+```bash
+lazygit -p sandbox/02-staging-lines
+```
+
 ## Scenario
 
 You are working on the `api` service in a platform monorepo. You just finished adding a new `cache_ttl` configuration option to `services/api/src/config.py`. During development, you also sprinkled in some `print("DEBUG: ...")` statements to troubleshoot a config-loading issue. The bug is fixed now, but you forgot to remove the debug prints before preparing your commit.
@@ -23,3 +27,9 @@ After completing the objectives, the staged (index) version of the file should c
 ## Prerequisites
 
 - [02-precision-staging/01-staging-hunks](../01-staging-hunks/) -- you should be comfortable with hunk-level staging in lazygit before moving to line-level staging.
+
+## Verify
+
+```bash
+./train.sh verify 2/2
+```

@@ -1,5 +1,9 @@
 # Navigating Panels
 
+```bash
+lazygit -p sandbox/01-navigating-panels
+```
+
 ## Scenario
 
 You've just joined a team working on a platform monorepo. A colleague suggested you try lazygit to manage your git workflow, so you installed it and are opening it for the first time. The repo has an active history with several branches and some uncommitted work in progress. Your task is to get comfortable moving around the lazygit interface before you start using it for real work.
@@ -34,3 +38,9 @@ Inside any panel:
 ## Prerequisites
 
 None -- this is the first lesson.
+
+## Verify
+
+```bash
+./train.sh verify 1/1
+```
