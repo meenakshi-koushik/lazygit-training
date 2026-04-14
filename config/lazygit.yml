@@ -1,0 +1,57 @@
+# Recommended lazygit configuration for training
+#
+# Copy to ~/.config/lazygit/config.yml or use:
+#   LG_CONFIG_FILE=config/lazygit.yml lazygit
+
+gui:
+  # Show file icons (requires nerd font)
+  showIcons: false
+  # Show the command log panel (helpful for learning what git commands lazygit runs)
+  showCommandLog: true
+  # Show the bottom line with keybinding hints
+  showBottomLine: true
+  # Border style
+  border: rounded
+  # Animation -- disable for snappier feel
+  animateExplosion: false
+
+git:
+  # Show the entire commit graph
+  log:
+    showGraph: always
+    order: topo-order
+  # Auto-fetch interval in seconds (0 to disable)
+  autoFetch: false
+  # Show divergence from base branch (helpful in monorepos)
+  branchLogCmd: "git log --graph --oneline --decorate {{branchName}} --"
+
+os:
+  # Use your preferred editor for editing commit messages
+  # editPreset: "nvim"
+
+# Keybinding reference (defaults):
+#   General:
+#     ? = show keybindings
+#     <tab> = switch panels
+#     [ / ] = switch tabs within a panel
+#     <enter> = focus/expand item
+#     <esc> = go back / cancel
+#
+#   Files panel:
+#     <space> = toggle stage
+#     a = stage/unstage all
+#     <enter> = open file in diff view (stage individual hunks/lines)
+#
+#   Commits panel:
+#     s = squash commit into parent
+#     f = fixup commit into parent
+#     r = reword commit message
+#     e = edit commit (start interactive rebase)
+#     d = drop commit
+#     <c-j>/<c-k> = move commit up/down
+#
+#   Branches panel:
+#     n = new branch
+#     <space> = checkout branch
+#     M = merge into current branch
+#     r = rebase current branch onto selected
