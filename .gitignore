@@ -1,6 +1,9 @@
 # Exercise sandboxes (disposable, recreated by setup scripts)
 sandbox/
 
-# Lesson hint state tracking
+# Lesson progress and hint state tracking
 *.state
-.lazygit-training-state
+.lazygit-training-state/
+
+# Build artifacts and temporary files
+dist/
