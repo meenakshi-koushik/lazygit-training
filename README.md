@@ -25,11 +25,8 @@ cd lazygit-training
 # List all available lessons
 ./train.sh list
 
-# Start a specific lesson (use module/lesson numbers)
-./train.sh start 1/1
-
-# Open lazygit in the exercise sandbox
-lazygit -p sandbox/01-navigating-panels
+# Start a lesson and open lazygit in one step
+./train.sh solve 1/1
 
 # Check if you completed the objectives
 ./train.sh verify 1/1
@@ -46,7 +43,7 @@ lazygit -p sandbox/01-navigating-panels
 Each lesson follows the same lifecycle:
 
 1. **Setup** -- `train.sh start` creates an isolated git repository inside `sandbox/` with a specific scenario (modified files, branches, conflicts, history).
-2. **Do** -- You open lazygit in the sandbox repo and complete the objectives described in the lesson README.
+2. **Do** -- You open lazygit in the sandbox repo and complete the objectives described in the lesson README. Use `train.sh solve` to set up and launch lazygit in one step.
 3. **Verify** -- `train.sh verify` runs automated checks to confirm you achieved the goal.
 4. **Reset** -- `train.sh reset` tears down the sandbox and lets you try again.
 

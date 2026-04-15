@@ -6,6 +6,7 @@ set -euo pipefail
 # Usage:
 #   ./train.sh list                     List all modules and lessons
 #   ./train.sh start <module/lesson>    Set up and start a lesson
+#   ./train.sh solve [module/lesson]    Start (if needed) and open lazygit
 #   ./train.sh verify [module/lesson]   Check if objectives are met
 #   ./train.sh hint [module/lesson]     Show the next progressive hint
 #   ./train.sh reset <module/lesson>    Tear down a lesson's sandbox
@@ -16,7 +17,7 @@ set -euo pipefail
 # Lesson references accept numeric shorthand (e.g., 1/1) or full names
 # (e.g., 01-orientation/01-navigating-panels).
 #
-# verify, hint, and solution default to the last started lesson when
+# solve, verify, hint, and solution default to the last started lesson when
 # no argument is given.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -40,6 +41,7 @@ Usage: ./train.sh <command> [arguments]
 Commands:
   list                     List all modules and lessons
   start <module/lesson>    Set up and start a lesson
+  solve [module/lesson]    Start (if needed) and open lazygit in the sandbox
   verify [module/lesson]   Check if lesson objectives are met
   hint [module/lesson]     Show the next progressive hint
   reset <module/lesson>    Tear down a lesson's sandbox
@@ -47,7 +49,7 @@ Commands:
   solution [module/lesson] Show the full solution walkthrough
   completions [bash|zsh]   Output shell completions for eval
 
-verify, hint, and solution default to the last started lesson when
+solve, verify, hint, and solution default to the last started lesson when
 no argument is given.
 
 Shell completions: eval "$(./train.sh completions)"
@@ -58,6 +60,7 @@ Lessons can be referenced by number (e.g., 1/1) or full name
 Examples:
   ./train.sh list
   ./train.sh start 1/1
+  ./train.sh solve 1/1
   ./train.sh verify
   ./train.sh hint
   ./train.sh reset 2/3
@@ -272,12 +275,51 @@ cmd_start() {
     info "Sandbox ready at: ${sandbox_path}"
     echo ""
     echo "  Next steps:"
-    echo "    1. lazygit -p ${sandbox_path}"
+    echo "    1. ./train.sh solve ${shorthand}   (or: lazygit -p ${sandbox_path})"
     echo "    2. Complete the objectives above"
     echo "    3. Run: ./train.sh verify ${shorthand}"
     echo ""
     echo "  Stuck? Run: ./train.sh hint ${shorthand}"
     echo ""
+}
+
+cmd_solve() {
+    local lesson_dir
+    lesson_dir=$(resolve_lesson "$1")
+    local name
+    name=$(sandbox_name "$lesson_dir")
+    local sandbox_path="${SANDBOX_DIR}/${name}"
+
+    # Auto-start if the sandbox doesn't exist yet
+    if [[ ! -d "$sandbox_path" ]]; then
+        cmd_start "$1"
+    fi
+
+    # Verify lazygit is installed
+    if ! command -v lazygit &>/dev/null; then
+        error "lazygit is not installed or not in PATH."
+        echo "  Install it from: https://github.com/jesseduffield/lazygit#installation"
+        exit 1
+    fi
+
+    # Build the lazygit command, auto-detecting per-lesson options.
+    local -a lg_args=()
+
+    # If the sandbox ships a lazygit config, use it.
+    if [[ -f "${sandbox_path}/lazygit.yml" ]]; then
+        lg_args+=(-ucf "${sandbox_path}/lazygit.yml")
+    fi
+
+    # If the actual git repo lives in a repo/ subdirectory, target that.
+    local repo_path="$sandbox_path"
+    if [[ -d "${sandbox_path}/repo/.git" ]]; then
+        repo_path="${sandbox_path}/repo"
+    fi
+    lg_args+=(-p "$repo_path")
+
+    info "Opening lazygit in ${repo_path}..."
+    echo ""
+    exec lazygit "${lg_args[@]}"
 }
 
 cmd_verify() {
@@ -480,8 +522,8 @@ _train_sh() {
     local cur prev commands lesson_commands
     cur="\${COMP_WORDS[COMP_CWORD]}"
     prev="\${COMP_WORDS[COMP_CWORD-1]}"
-    commands="list start verify hint reset reset-all solution completions help"
-    lesson_commands="start verify hint reset solution"
+    commands="list start solve verify hint reset reset-all solution completions help"
+    lesson_commands="start solve verify hint reset solution"
 
     if [[ \$COMP_CWORD -eq 1 ]]; then
         COMPREPLY=(\$(compgen -W "\$commands" -- "\$cur"))
@@ -505,8 +547,8 @@ BASH
             cat <<ZSH
 _train_sh() {
     local commands lesson_commands
-    commands=(list start verify hint reset reset-all solution completions help)
-    lesson_commands=(start verify hint reset solution)
+    commands=(list start solve verify hint reset reset-all solution completions help)
+    lesson_commands=(start solve verify hint reset solution)
 
     if (( CURRENT == 2 )); then
         _describe 'command' commands
@@ -547,6 +589,7 @@ shift
 case "$command" in
     list)     cmd_list ;;
     start)    [[ $# -ge 1 ]] || { error "Usage: ./train.sh start <module/lesson>"; exit 1; }; cmd_start "$1" ;;
+    solve)    cmd_solve "${1:-$(get_last_lesson)}" ;;
     verify)   cmd_verify "${1:-$(get_last_lesson)}" ;;
     hint)     cmd_hint "${1:-$(get_last_lesson)}" ;;
     reset)    [[ $# -ge 1 ]] || { error "Usage: ./train.sh reset <module/lesson>"; exit 1; }; cmd_reset "$1" ;;

@@ -178,6 +178,7 @@ The CLI runner supports these subcommands:
 |---------|-------------|
 | `./train.sh list` | List all modules and lessons with completion status |
 | `./train.sh start <module/lesson>` | Run setup.sh, print the lesson README |
+| `./train.sh solve [module/lesson]` | Start (if needed) and open lazygit in the sandbox |
 | `./train.sh verify <module/lesson>` | Run verify.sh against the sandbox |
 | `./train.sh hint <module/lesson>` | Show the next unseen hint |
 | `./train.sh reset <module/lesson>` | Tear down the sandbox for a lesson |
