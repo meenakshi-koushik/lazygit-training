@@ -93,17 +93,17 @@ else
     _fail "customCommands section is missing"
 fi
 
-# 10. Custom command bound to key 't' in 'files' context with subprocess
+# 10. Custom command bound to key 't' in 'files' context with output: terminal
 if echo "$config_no_comments" | grep -qE 'key:\s*"?t"?\s*$|key:\s*'"'"'t'"'"''; then
     _pass "Custom command bound to key 't'"
 else
     _fail "Custom command should be bound to key 't'"
 fi
 
-if echo "$config_no_comments" | grep -q 'subprocess:.*true'; then
-    _pass "Custom command has subprocess: true"
+if echo "$config_no_comments" | grep -q 'output:.*terminal'; then
+    _pass "Custom command has output: terminal"
 else
-    _fail "Custom command should have subprocess: true"
+    _fail "Custom command should have output: terminal"
 fi
 
 verify_summary

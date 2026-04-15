@@ -64,11 +64,11 @@ else
     _fail "Custom command description should contain 'Run tests'"
 fi
 
-# 7. subprocess should be true
-if echo "$config_no_comments" | grep -q 'subprocess:.*true'; then
-    _pass "subprocess is set to true"
+# 7. output should be terminal
+if echo "$config_no_comments" | grep -q 'output:.*terminal'; then
+    _pass "output is set to terminal"
 else
-    _fail "subprocess should be set to true (shows command output in terminal)"
+    _fail "output should be set to terminal (shows command output in terminal)"
 fi
 
 verify_summary

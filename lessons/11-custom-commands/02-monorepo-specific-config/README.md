@@ -22,7 +22,7 @@ You will configure lazygit to:
 2. **Configure main branches**: set `git.mainBranches` to a list containing both `main` and `develop`.
 3. **Increase diff context**: set `git.diffContextSize` to `5`.
 4. **Add commit message prefix**: add a `git.commitPrefix` entry with a `pattern` that captures a ticket ID from branch names like `feature/PROJ-42-description`, and a `replace` string that uses the captured group (e.g., `[$1] `).
-5. **Add a service-aware custom command**: add a `customCommands` entry that uses the `{{.SelectedFile.Name}}` template variable. The command should be bound to key `t` in the `files` context, with `subprocess: true`.
+5. **Add a service-aware custom command**: add a `customCommands` entry that uses the `{{.SelectedFile.Name}}` template variable. The command should be bound to key `t` in the `files` context, with `output: terminal`.
 
 ## Key Concepts
 

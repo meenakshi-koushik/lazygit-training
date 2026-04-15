@@ -20,14 +20,14 @@ customCommands:
     context: "files"
     command: "echo \"TESTS PASSED\""
     description: "Run tests"
-    subprocess: true
+    output: terminal
 ```
 
 Save the file.
 
-This adds a custom keybinding `T` that is available in the **Files** panel. When pressed, it runs `echo "TESTS PASSED"` in a subprocess (meaning the output is shown in your terminal, and lazygit pauses until you press enter).
+This adds a custom keybinding `T` that is available in the **Files** panel. When pressed, it runs `echo "TESTS PASSED"` in a terminal session (meaning the output is shown in your terminal, and lazygit pauses until you press enter).
 
-> **Config context:** In a real workflow, you would replace `echo "TESTS PASSED"` with your actual test command, e.g., `make test`, `npm test`, or `pytest services/api/`. The `subprocess: true` setting is important for interactive commands -- it gives the command full access to your terminal.
+> **Config context:** In a real workflow, you would replace `echo "TESTS PASSED"` with your actual test command, e.g., `make test`, `npm test`, or `pytest services/api/`. The `output: terminal` setting is important for interactive commands -- it suspends lazygit and gives the command full access to your terminal.
 
 ## Step 3 -- Test in lazygit (optional)
 
@@ -39,7 +39,7 @@ lazygit -ucf sandbox/01-custom-keybindings/lazygit.yml -p sandbox/01-custom-keyb
 
 The `-ucf` flag tells lazygit to use a specific config file. Once inside:
 1. Press `2` to go to the **Files** panel.
-2. Press `T` -- you should see "TESTS PASSED" printed in a subprocess window.
+2. Press `T` -- you should see "TESTS PASSED" printed in a terminal window.
 3. Press `<enter>` to return to lazygit.
 
 ## Step 4 -- Verify your work
@@ -55,7 +55,7 @@ All checks should pass:
 4. Uses `files` context.
 5. Command outputs "TESTS PASSED".
 6. Description contains "Run tests".
-7. subprocess is true.
+7. output is terminal.
 
 ## Bonus: More custom command ideas
 
@@ -68,14 +68,13 @@ customCommands:
     context: "files"
     command: "echo \"TESTS PASSED\""
     description: "Run tests"
-    subprocess: true
+    output: terminal
 
   # Open the selected file in VS Code
   - key: "E"
     context: "files"
     command: "code {{.SelectedFile.Name}}"
     description: "Open in VS Code"
-    subprocess: false
 
   # Create a conventional commit with a type prefix
   - key: "C"

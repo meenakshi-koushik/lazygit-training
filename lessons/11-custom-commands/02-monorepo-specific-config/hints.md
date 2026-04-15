@@ -41,7 +41,7 @@ customCommands:
     context: "files"
     command: "echo Running tests for {{.SelectedFile.Name}}"
     description: "Run tests for selected file"
-    subprocess: true
+    output: terminal
 ```
 
 Combine all settings into the config file and run `./train.sh verify 11/2`.

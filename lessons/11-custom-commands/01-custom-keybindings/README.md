@@ -29,7 +29,7 @@ customCommands:
     context: "files"              # Which panel it works in (files, branches, commits, stash, global)
     description: "Run tests"      # Shown in the keybinding menu
     command: "make test"          # The shell command to run
-    subprocess: true              # true = show output in terminal; false = run in background
+    output: terminal              # 'terminal' = show output in terminal; 'none' = run in background
 ```
 
 Common `context` values:
@@ -53,7 +53,7 @@ For example, to lint only the selected file:
   context: "files"
   command: "eslint {{.SelectedFile.Name}}"
   description: "Lint selected file"
-  subprocess: true
+  output: terminal
 ```
 
 ## Prerequisites

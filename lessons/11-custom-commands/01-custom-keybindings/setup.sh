@@ -44,8 +44,6 @@ gui:
   nerdFontsVersion: ""
 
 git:
-  paging:
-    colorArg: always
   commit:
     signOff: false
 

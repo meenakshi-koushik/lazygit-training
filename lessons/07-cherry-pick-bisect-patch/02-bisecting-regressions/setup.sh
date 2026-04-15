@@ -147,35 +147,7 @@ EOF
 git -C "$REPO" add infra/terraform/variables.tf
 git -C "$REPO" commit --quiet -m "feat(infra): add monitoring and instance type variables"
 
-# --- Commit 9: THE BAD COMMIT -- changes health endpoint to "unhealthy" ---
-
-cat > "$REPO/services/api/src/routes.py" << 'PYEOF'
-"""HTTP routes for api service."""
-
-from flask import Flask, jsonify
-
-
-def create_app(settings):
-    app = Flask(__name__)
-
-    @app.route("/health")
-    def health():
-        return jsonify({"status": "unhealthy", "service": "api"})
-
-    @app.route("/api/v1/api")
-    def index():
-        return jsonify({"message": "Welcome to api"})
-
-    return app
-PYEOF
-git -C "$REPO" add services/api/src/routes.py
-git -C "$REPO" commit --quiet -m "refactor(api): update health endpoint response format"
-
-# Tag the bad commit for verification
-BAD_COMMIT=$(git -C "$REPO" rev-parse HEAD)
-git -C "$REPO" tag "the-bad-commit"
-
-# --- Commit 10: feat(worker): add metrics collection ---
+# --- Commit 9: feat(worker): add metrics collection ---
 
 cat > "$REPO/services/worker/src/metrics.py" << 'PYEOF'
 """Metrics collection for worker service."""
@@ -205,7 +177,7 @@ PYEOF
 git -C "$REPO" add services/worker/src/metrics.py
 git -C "$REPO" commit --quiet -m "feat(worker): add metrics collection module"
 
-# --- Commit 11: docs: add deployment runbook ---
+# --- Commit 10: docs: add deployment runbook ---
 
 cat > "$REPO/docs/deployment.md" << 'EOF'
 # Deployment Runbook
@@ -226,7 +198,7 @@ EOF
 git -C "$REPO" add docs/deployment.md
 git -C "$REPO" commit --quiet -m "docs: add deployment runbook"
 
-# --- Commit 12: fix(libs/common): timezone handling ---
+# --- Commit 11: fix(libs/common): timezone handling ---
 
 cat >> "$REPO/libs/common/src/common.py" << 'PYEOF'
 
@@ -244,6 +216,34 @@ def parse_timestamp(ts_string):
 PYEOF
 git -C "$REPO" add libs/common/src/common.py
 git -C "$REPO" commit --quiet -m "fix(libs/common): handle timezone edge case in date utils"
+
+# --- Commit 12: THE BAD COMMIT -- changes health endpoint to "unhealthy" ---
+
+cat > "$REPO/services/api/src/routes.py" << 'PYEOF'
+"""HTTP routes for api service."""
+
+from flask import Flask, jsonify
+
+
+def create_app(settings):
+    app = Flask(__name__)
+
+    @app.route("/health")
+    def health():
+        return jsonify({"status": "unhealthy", "service": "api"})
+
+    @app.route("/api/v1/api")
+    def index():
+        return jsonify({"message": "Welcome to api"})
+
+    return app
+PYEOF
+git -C "$REPO" add services/api/src/routes.py
+git -C "$REPO" commit --quiet -m "refactor(api): update health endpoint response format"
+
+# Tag the bad commit for verification
+BAD_COMMIT=$(git -C "$REPO" rev-parse HEAD)
+git -C "$REPO" tag "the-bad-commit"
 
 # --- Commit 13: chore: bump dependency versions ---
 

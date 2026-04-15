@@ -30,8 +30,6 @@ Under the `git:` section, add `mainBranches`, and `diffContextSize`:
 
 ```yaml
 git:
-  paging:
-    colorArg: always
   commit:
     signOff: false
   mainBranches:
@@ -65,10 +63,10 @@ customCommands:
     context: "files"
     command: "echo Running tests for {{.SelectedFile.Name}}"
     description: "Run tests for selected file"
-    subprocess: true
+    output: terminal
 ```
 
-> **Why it matters:** In a real workflow you would replace the `echo` with something like `pytest $(dirname {{.SelectedFile.Name}})` or `cd $(echo {{.SelectedFile.Name}} | cut -d/ -f1-2) && make test` to run tests only for the service containing the selected file. The `subprocess: true` setting gives the command full terminal access so you can see output and interact if needed.
+> **Why it matters:** In a real workflow you would replace the `echo` with something like `pytest $(dirname {{.SelectedFile.Name}})` or `cd $(echo {{.SelectedFile.Name}} | cut -d/ -f1-2) && make test` to run tests only for the service containing the selected file. The `output: terminal` setting suspends lazygit and runs the command in a full terminal so you can see output and interact if needed.
 
 ## Complete config file
 
@@ -82,8 +80,6 @@ gui:
   showNumstatInFilesView: true
 
 git:
-  paging:
-    colorArg: always
   commit:
     signOff: false
   mainBranches:
@@ -102,7 +98,7 @@ customCommands:
     context: "files"
     command: "echo Running tests for {{.SelectedFile.Name}}"
     description: "Run tests for selected file"
-    subprocess: true
+    output: terminal
 ```
 
 ## Step 6 -- Test in lazygit (optional)

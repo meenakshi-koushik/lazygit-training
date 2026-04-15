@@ -12,7 +12,7 @@ customCommands:
     context: ...
     command: ...
     description: ...
-    subprocess: ...
+    output: ...
 ```
 
 Fill in the values according to the objectives.
@@ -27,7 +27,7 @@ customCommands:
     context: "files"
     command: "echo \"TESTS PASSED\""
     description: "Run tests"
-    subprocess: true
+    output: terminal
 ```
 
 Add this to the end of `lazygit.yml`, save, and run `./train.sh verify 11/1`.

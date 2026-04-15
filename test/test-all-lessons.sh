@@ -1101,7 +1101,7 @@ customCommands:
     context: files
     command: echo "TESTS PASSED"
     description: "Run tests"
-    subprocess: true
+    output: terminal
 YAMLEOF
 }
 
@@ -1126,7 +1126,7 @@ customCommands:
     context: files
     command: "echo Running tests for {{.SelectedFile.Name}}"
     description: "Run tests for selected file"
-    subprocess: true
+    output: terminal
 YAMLEOF
 }
 

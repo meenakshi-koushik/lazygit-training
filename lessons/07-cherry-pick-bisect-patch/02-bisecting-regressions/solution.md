@@ -57,6 +57,12 @@ You will need approximately 3-4 iterations. Each time:
 - Check `services/api/src/routes.py` for `"healthy"` vs `"unhealthy"`.
 - Mark the commit accordingly with `b` in the Commits panel.
 
+The typical bisect path for this exercise:
+1. First midpoint lands in the middle of the range -- the file shows `"healthy"` -- mark **good**.
+2. The range narrows to the upper half. Next midpoint -- still `"healthy"` -- mark **good**.
+3. Range narrows again. Next midpoint -- the file shows `"unhealthy"` -- mark **bad**.
+4. One final midpoint and git identifies the first bad commit.
+
 ## Step 6 -- Bisect completes
 
 After enough iterations, git bisect will identify the first bad commit. Lazygit will display a message indicating which commit introduced the regression. The culprit is the commit with message:
