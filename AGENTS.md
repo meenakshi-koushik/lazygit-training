@@ -35,6 +35,8 @@ lazygit-training/
 │   ├── monorepo.sh        # Monorepo scaffolding functions
 │   ├── history.sh         # Commit history generation functions
 │   └── verify.sh          # Shared verification helpers
+├── test/
+│   └── test-all-lessons.sh  # Automated test suite for all 34 lessons
 ├── sandbox/               # (gitignored) Disposable exercise repos
 └── lessons/
     └── NN-module-name/
@@ -230,7 +232,36 @@ Other frequently-used keybindings that have been sources of errors:
 - **Monorepo-grounded**: Scenarios should reflect real monorepo situations (cross-component changes, concurrent team modifications, release branch management).
 - **Concise**: Learners are intermediate developers. Don't over-explain. Respect their time.
 
-## Testing a Lesson
+## Testing
+
+### Automated Test Suite
+
+The test script at `test/test-all-lessons.sh` verifies every lesson's full lifecycle automatically. Run it after any change to lessons, `lib/`, or `train.sh`:
+
+```bash
+bash test/test-all-lessons.sh
+```
+
+For each of the 34 lessons, the script:
+
+1. Runs `setup.sh` -- confirms the scenario builds without errors
+2. Runs `verify.sh` directly -- confirms it **fails** (exit 1) before the learner does anything
+3. Calls a lesson-specific simulation function that "solves" the lesson using git commands (no lazygit)
+4. Runs `verify.sh` directly -- confirms it **passes** (exit 0) after the simulation
+5. Runs `./train.sh reset` -- confirms cleanup works
+
+The script prints a summary at the end. **All 34 lessons must pass.**
+
+### Keeping the Test Suite Up-to-Date
+
+When you add, modify, or remove a lesson, you **must** update the test suite in the same change:
+
+- **New lesson**: Add a `simulate_<module>_<lesson>()` function that reproduces the solution using git commands (not lazygit). Add a `run_lesson_test` call in the appropriate module section. Update the total count in the header.
+- **Modified setup.sh or verify.sh**: The existing simulation may no longer produce the right state. Run the tests to check and update the simulation function if needed.
+- **Removed lesson**: Delete the corresponding simulation function and `run_lesson_test` call. Update the total count.
+- **Modified lib/**: Run the full test suite -- changes to shared libraries can break any lesson.
+
+### Testing a Single Lesson Manually
 
 Before committing a new lesson, verify the full lifecycle works:
 

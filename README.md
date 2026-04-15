@@ -178,6 +178,8 @@ lazygit-training/
 │   ├── monorepo.sh        # Functions to create realistic monorepo structures
 │   ├── history.sh         # Functions to generate commit histories
 │   └── verify.sh          # Shared verification helpers
+├── test/
+│   └── test-all-lessons.sh  # Automated test suite for all lessons
 ├── sandbox/               # (gitignored) Exercise repos created here
 └── lessons/
     └── <module>/
@@ -200,6 +202,27 @@ LG_CONFIG_FILE=config/lazygit.yml lazygit
 # Or copy to your lazygit config directory
 cp config/lazygit.yml ~/.config/lazygit/config.yml
 ```
+
+## Running Tests
+
+An automated test suite verifies every lesson's full lifecycle:
+
+```bash
+# Run all 34 lessons end-to-end
+bash test/test-all-lessons.sh
+```
+
+For each lesson, the test script:
+
+1. Runs `setup.sh` -- confirms the scenario builds without errors
+2. Runs `verify.sh` -- confirms it **fails** before the learner does anything
+3. Simulates the solution using git commands (no lazygit required)
+4. Runs `verify.sh` -- confirms it **passes** after the solution
+5. Runs `reset` -- confirms cleanup works
+
+The script prints a pass/fail summary at the end. All 34 lessons must pass before merging changes.
+
+**When to run tests**: After modifying any lesson's `setup.sh`, `verify.sh`, or the shared libraries in `lib/`. When adding a new lesson, add a corresponding simulation function to `test/test-all-lessons.sh`.
 
 ## Contributing
 
