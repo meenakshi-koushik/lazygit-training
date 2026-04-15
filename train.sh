@@ -6,18 +6,32 @@ set -euo pipefail
 # Usage:
 #   ./train.sh list                     List all modules and lessons
 #   ./train.sh start <module/lesson>    Set up and start a lesson
-#   ./train.sh verify <module/lesson>   Check if objectives are met
-#   ./train.sh hint <module/lesson>     Show the next progressive hint
+#   ./train.sh verify [module/lesson]   Check if objectives are met
+#   ./train.sh hint [module/lesson]     Show the next progressive hint
 #   ./train.sh reset <module/lesson>    Tear down a lesson's sandbox
-#   ./train.sh solution <module/lesson> Show the full solution walkthrough
+#   ./train.sh reset-all                Remove all sandboxes and state
+#   ./train.sh solution [module/lesson] Show the full solution walkthrough
+#   ./train.sh completions [bash|zsh]   Output shell completions for eval
 #
 # Lesson references accept numeric shorthand (e.g., 1/1) or full names
 # (e.g., 01-orientation/01-navigating-panels).
+#
+# verify, hint, and solution default to the last started lesson when
+# no argument is given.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
 
 STATE_DIR="${REPO_ROOT}/.lazygit-training-state"
+
+# Render markdown through glow when available, fall back to cat.
+render_markdown() {
+    if command -v glow &>/dev/null; then
+        glow --width 0 "$@"
+    else
+        cat "$@"
+    fi
+}
 
 usage() {
     cat << 'EOF'
@@ -26,10 +40,17 @@ Usage: ./train.sh <command> [arguments]
 Commands:
   list                     List all modules and lessons
   start <module/lesson>    Set up and start a lesson
-  verify <module/lesson>   Check if lesson objectives are met
-  hint <module/lesson>     Show the next progressive hint
+  verify [module/lesson]   Check if lesson objectives are met
+  hint [module/lesson]     Show the next progressive hint
   reset <module/lesson>    Tear down a lesson's sandbox
-  solution <module/lesson> Show the full solution walkthrough
+  reset-all                Remove all sandboxes and training state
+  solution [module/lesson] Show the full solution walkthrough
+  completions [bash|zsh]   Output shell completions for eval
+
+verify, hint, and solution default to the last started lesson when
+no argument is given.
+
+Shell completions: eval "$(./train.sh completions)"
 
 Lessons can be referenced by number (e.g., 1/1) or full name
 (e.g., 01-orientation/01-navigating-panels).
@@ -37,10 +58,10 @@ Lessons can be referenced by number (e.g., 1/1) or full name
 Examples:
   ./train.sh list
   ./train.sh start 1/1
-  ./train.sh verify 1/1
-  ./train.sh hint 1/1
+  ./train.sh verify
+  ./train.sh hint
   ./train.sh reset 2/3
-  ./train.sh solution 2/3
+  ./train.sh solution
 EOF
 }
 
@@ -139,6 +160,17 @@ lesson_shorthand() {
     echo "?/?"
 }
 
+# Return the last-started lesson shorthand, or exit with an error.
+get_last_lesson() {
+    local state_file="${STATE_DIR}/last-lesson"
+    if [[ -f "$state_file" ]]; then
+        cat "$state_file"
+    else
+        error "No lesson has been started yet. Run './train.sh start <module/lesson>' first."
+        exit 1
+    fi
+}
+
 # --- Commands ---
 
 cmd_list() {
@@ -219,6 +251,10 @@ cmd_start() {
         exit 1
     fi
 
+    # Record this as the last-started lesson
+    mkdir -p "$STATE_DIR"
+    echo "$shorthand" > "${STATE_DIR}/last-lesson"
+
     info "Setting up exercise environment..."
     bash "$setup_script"
     echo ""
@@ -226,7 +262,7 @@ cmd_start() {
     # Print the lesson README
     separator
     if [[ -f "${lesson_dir}/README.md" ]]; then
-        cat "${lesson_dir}/README.md"
+        render_markdown "${lesson_dir}/README.md"
     fi
     echo ""
     separator
@@ -315,6 +351,7 @@ cmd_hint() {
     echo ""
 
     # Extract the Nth hint block
+    local hint_text=""
     local in_target=false
     local target_header="## Hint ${current_hint}"
     while IFS= read -r line; do
@@ -327,9 +364,11 @@ cmd_hint() {
             fi
         fi
         if $in_target; then
-            echo "$line"
+            hint_text+="${line}"$'\n'
         fi
     done < "$hints_file"
+
+    echo "$hint_text" | render_markdown
 
     echo ""
 
@@ -368,6 +407,20 @@ cmd_reset() {
     echo ""
 }
 
+cmd_reset_all() {
+    info "Removing all sandboxes and training state..."
+
+    if [[ -d "$SANDBOX_DIR" ]]; then
+        rm -rf "$SANDBOX_DIR"
+    fi
+    if [[ -d "$STATE_DIR" ]]; then
+        rm -rf "$STATE_DIR"
+    fi
+
+    success "All sandboxes and state have been removed."
+    echo ""
+}
+
 cmd_solution() {
     local lesson_dir
     lesson_dir=$(resolve_lesson "$1")
@@ -382,8 +435,103 @@ cmd_solution() {
     color_echo bold "Solution: $1"
     separator
     echo ""
-    cat "$solution_file"
+    render_markdown "$solution_file"
     echo ""
+}
+
+# Hidden helper: list all lessons with shorthand, full path, and title.
+# Output format: shorthand<TAB>module-dir/lesson-dir<TAB>title
+# Used by shell completion functions.
+cmd_list_lessons() {
+    local mod_idx=0
+    for mod_dir in "$LESSONS_DIR"/*/; do
+        [[ -d "$mod_dir" ]] || continue
+        mod_idx=$((mod_idx + 1))
+        local mod_name les_idx
+        mod_name=$(basename "$mod_dir")
+        les_idx=0
+        for les_dir in "$mod_dir"*/; do
+            [[ -d "$les_dir" ]] || continue
+            les_idx=$((les_idx + 1))
+            local les_name title
+            les_name=$(basename "$les_dir")
+            title=""
+            if [[ -f "${les_dir}/README.md" ]]; then
+                title=$(head -1 "${les_dir}/README.md" | sed 's/^#\+ //')
+            fi
+            printf '%s\t%s/%s\t%s\n' "${mod_idx}/${les_idx}" "$mod_name" "$les_name" "$title"
+        done
+    done
+}
+
+cmd_completions() {
+    local shell="${1:-}"
+    if [[ -z "$shell" ]]; then
+        shell="$(basename "${SHELL:-bash}")"
+    fi
+
+    local script_path
+    script_path="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
+
+    case "$shell" in
+        bash)
+            cat <<BASH
+_train_sh() {
+    local cur prev commands lesson_commands
+    cur="\${COMP_WORDS[COMP_CWORD]}"
+    prev="\${COMP_WORDS[COMP_CWORD-1]}"
+    commands="list start verify hint reset reset-all solution completions help"
+    lesson_commands="start verify hint reset solution"
+
+    if [[ \$COMP_CWORD -eq 1 ]]; then
+        COMPREPLY=(\$(compgen -W "\$commands" -- "\$cur"))
+        return
+    fi
+
+    if [[ \$COMP_CWORD -eq 2 ]] && [[ " \$lesson_commands " == *" \$prev "* ]]; then
+        local words=""
+        while IFS=\$'\\t' read -r shorthand fullpath title; do
+            words+=" \$shorthand \$fullpath"
+        done < <("$script_path" _lessons 2>/dev/null)
+        COMPREPLY=(\$(compgen -W "\$words" -- "\$cur"))
+        return
+    fi
+}
+complete -F _train_sh train.sh
+complete -F _train_sh ./train.sh
+BASH
+            ;;
+        zsh)
+            cat <<ZSH
+_train_sh() {
+    local commands lesson_commands
+    commands=(list start verify hint reset reset-all solution completions help)
+    lesson_commands=(start verify hint reset solution)
+
+    if (( CURRENT == 2 )); then
+        _describe 'command' commands
+        return
+    fi
+
+    if (( CURRENT == 3 )) && (( \${lesson_commands[(Ie)\${words[2]}]} )); then
+        local -a specs
+        while IFS=\$'\\t' read -r shorthand fullpath title; do
+            specs+=("\${shorthand}:\${title}" "\${fullpath}:\${title}")
+        done < <("$script_path" _lessons 2>/dev/null)
+        _describe 'lesson' specs
+        return
+    fi
+}
+compdef _train_sh train.sh
+compdef _train_sh ./train.sh
+ZSH
+            ;;
+        *)
+            echo "Unsupported shell: ${shell}" >&2
+            echo "Supported shells: bash, zsh" >&2
+            exit 1
+            ;;
+    esac
 }
 
 # --- Main ---
@@ -399,10 +547,13 @@ shift
 case "$command" in
     list)     cmd_list ;;
     start)    [[ $# -ge 1 ]] || { error "Usage: ./train.sh start <module/lesson>"; exit 1; }; cmd_start "$1" ;;
-    verify)   [[ $# -ge 1 ]] || { error "Usage: ./train.sh verify <module/lesson>"; exit 1; }; cmd_verify "$1" ;;
-    hint)     [[ $# -ge 1 ]] || { error "Usage: ./train.sh hint <module/lesson>"; exit 1; }; cmd_hint "$1" ;;
+    verify)   cmd_verify "${1:-$(get_last_lesson)}" ;;
+    hint)     cmd_hint "${1:-$(get_last_lesson)}" ;;
     reset)    [[ $# -ge 1 ]] || { error "Usage: ./train.sh reset <module/lesson>"; exit 1; }; cmd_reset "$1" ;;
-    solution) [[ $# -ge 1 ]] || { error "Usage: ./train.sh solution <module/lesson>"; exit 1; }; cmd_solution "$1" ;;
+    reset-all) cmd_reset_all ;;
+    solution) cmd_solution "${1:-$(get_last_lesson)}" ;;
+    completions) cmd_completions "${1:-}" ;;
+    _lessons) cmd_list_lessons ;;
     help|-h|--help) usage ;;
     *)        error "Unknown command: ${command}"; usage; exit 1 ;;
 esac

@@ -14,6 +14,8 @@ You should already be comfortable with basic git operations (add, commit, push, 
 | lazygit | 0.40+ | [github.com/jesseduffield/lazygit](https://github.com/jesseduffield/lazygit#installation) |
 | bash | 4.0+ | Included on Linux/macOS; WSL on Windows |
 
+**Optional:** Install [glow](https://github.com/charmbracelet/glow) for nicely rendered markdown when viewing lessons, hints, and solutions in the terminal. Without it, `train.sh` falls back to plain `cat`.
+
 ## Quick Start
 
 ```bash

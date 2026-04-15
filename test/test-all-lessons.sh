@@ -4,7 +4,7 @@ set -euo pipefail
 ###############################################################################
 # test-all-lessons.sh
 #
-# Automated test runner for all 34 lazygit training lessons.
+# Automated test runner for all 34 lazygit training lessons plus CLI command tests.
 # For each lesson: setup → verify FAILS → simulate solution → verify PASSES → reset.
 ###############################################################################
 
@@ -1137,7 +1137,7 @@ YAMLEOF
 main() {
     header "lazygit Training -- Automated Test Suite"
     echo ""
-    info "Testing all 34 lessons..."
+    info "Testing all 34 lessons + CLI commands..."
     info "Each lesson: setup → verify fails → simulate → verify passes → reset"
     echo ""
 
@@ -1196,6 +1196,49 @@ main() {
     # Module 11: Custom Commands
     run_lesson_test "11/1" "Custom Keybindings" simulate_11_1
     run_lesson_test "11/2" "Monorepo-Specific Config" simulate_11_2
+
+    # --- CLI command tests ---
+    header "CLI command tests"
+
+    # _lessons
+    TOTAL=$((TOTAL + 1))
+    dim "  Testing _lessons output..."
+    local lessons_output
+    lessons_output=$("$REPO_ROOT/train.sh" _lessons 2>&1)
+    local lessons_lines
+    lessons_lines=$(echo "$lessons_output" | wc -l)
+    if [[ "$lessons_lines" -eq 34 ]] && echo "$lessons_output" | head -1 | grep -qP '^\d+/\d+\t.+\t.+$'; then
+        success "_lessons: outputs 34 tab-delimited lesson entries"
+        PASSED=$((PASSED + 1))
+    else
+        fail "_lessons: expected 34 tab-delimited lines, got ${lessons_lines}"
+        FAILED=$((FAILED + 1))
+        FAILED_LESSONS+=("_lessons")
+    fi
+
+    # completions bash
+    TOTAL=$((TOTAL + 1))
+    dim "  Testing completions bash..."
+    if "$REPO_ROOT/train.sh" completions bash 2>&1 | grep -q 'complete -F _train_sh'; then
+        success "completions bash: outputs valid bash completion"
+        PASSED=$((PASSED + 1))
+    else
+        fail "completions bash: missing expected complete -F directive"
+        FAILED=$((FAILED + 1))
+        FAILED_LESSONS+=("completions bash")
+    fi
+
+    # completions zsh
+    TOTAL=$((TOTAL + 1))
+    dim "  Testing completions zsh..."
+    if "$REPO_ROOT/train.sh" completions zsh 2>&1 | grep -q 'compdef _train_sh'; then
+        success "completions zsh: outputs valid zsh completion"
+        PASSED=$((PASSED + 1))
+    else
+        fail "completions zsh: missing expected compdef directive"
+        FAILED=$((FAILED + 1))
+        FAILED_LESSONS+=("completions zsh")
+    fi
 
     # --- Summary ---
     echo ""
