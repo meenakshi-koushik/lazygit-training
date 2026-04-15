@@ -146,13 +146,13 @@ Collaborate safely when many people push to the same repo.
 
 ### Module 10: GitHub & GitLab Integration
 
-Use lazygit's built-in platform integrations.
+Use lazygit to prepare and review code for pull requests.
 
 | # | Lesson | What You Learn |
 |---|--------|---------------|
-| 01 | Creating PRs from Lazygit | Open pull/merge requests without leaving the terminal |
-| 02 | Reviewing PRs Locally | Check out and review PRs in lazygit |
-| 03 | CI Status and PR Workflows | View CI status, navigate PR comments |
+| 01 | Creating PRs from Lazygit | Squash commits, reword with conventional format, push a PR-ready branch |
+| 02 | Reviewing PRs Locally | Fetch remote branches, review changes with diff mode |
+| 03 | CI Status and PR Workflows | Rebase onto updated main, force-push after rebase |
 
 ### Module 11: Custom Commands & Power Configuration
 
@@ -161,7 +161,7 @@ Tailor lazygit to your monorepo workflow.
 | # | Lesson | What You Learn |
 |---|--------|---------------|
 | 01 | Custom Keybindings | Add keybindings for repetitive operations |
-| 02 | Monorepo-Specific Config | Diff filters, ignore patterns, custom commands for multi-component repos |
+| 02 | Monorepo-Specific Config | File tree view, diff context, commit prefixes, service-aware custom commands |
 
 ## Repository Structure
 
